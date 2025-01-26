@@ -20,7 +20,7 @@ if __name__ == "__main__":
     model.eval()
     torchsummary.summary(model,input_size=(3,256,256))
 
-    img = cv2.imread("{}/strawberry.jpg".format(base_path))
+    img = cv2.imread("{}/proxy-image.jpg".format(base_path))
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(img_rgb,(256,256))
     img_normalized = img/255.0
@@ -32,14 +32,12 @@ if __name__ == "__main__":
     print(output_image.shape)
     if output_image.shape[0] == 1:  # RGB image (C, H, W)
         output_image = output_image.transpose(1, 2, 0)
-
-    fig = plt.figure()
-    plt.subplot(1,2,1)
-    plt.imshow(output_image,cmap='gray')
-    plt.subplot(1,2,2)
-    plt.imshow(img_rgb)
-    plt.tight_layout()
-    plt.show()
-
+    binary_mask = (output_image > 0.3).astype(np.uint8)
+    binary_mask *= 255
+    binary_mask = cv2.resize(binary_mask,(img.shape[1],img.shape[0]))
+    result = cv2.bitwise_and(img, img, mask=binary_mask)
+    cv2.imshow("result", result)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
