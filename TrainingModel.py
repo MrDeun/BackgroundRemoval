@@ -11,7 +11,7 @@ def train_autoencoder(model, dataloader, epochs=10, lr=0.001):
     model.to(device)
     print(device)
 
-    criterion = nn.BCELoss()  # Binary Cross Entropy for mask prediction
+    criterion = nn.BCELoss() 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     max_step = 200
 
